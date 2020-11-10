@@ -42,10 +42,10 @@ It's suggested to create a new project to run systems tests, because some system
     gcloud config set compute/zone "$CONFIG_ZONE"
     gcloud config set compute/region "$CONFIG_REGION"
     gcloud config set project "$PROJECT_ID"
-    gcloud beta billing projects link "$PROJECT_ID"  --billing-account=`gcloud beta billing accounts list --format='value(ACCOUNT_ID)' --limit 1`
+    gcloud beta billing projects link "$PROJECT_ID" --billing-account=`gcloud beta billing accounts list --format='value(ACCOUNT_ID)' --limit 1`
     ```
 
-2.  Copy one of your existing environments as a base for your environment. Subsequent commands will only
+1.  Copy one of your existing environments as a base for your environment. Subsequent commands will only
     be run in this environment, so you can change your working directory.
 
     ```bash
@@ -55,7 +55,7 @@ It's suggested to create a new project to run systems tests, because some system
     cd "terraform/envs/${ENV_NAME}"
     ```
 
-3.  Update the project ID in the locals section
+1.  Update the project ID in the locals section
 
     ```tf
     locals {
@@ -63,7 +63,9 @@ It's suggested to create a new project to run systems tests, because some system
     }
     ```
 
-4. To create all resources in the environment, run:
+1. (Optional) If you do not plan to use some service accounts, you can comment on this service account.
+
+1. To create all resources in the environment, run:
 
     ```bash
     terraform apply
@@ -79,7 +81,7 @@ It's suggested to create a new project to run systems tests, because some system
     service_account_bucket_name = mik-laj-system-tests-system-tests-vosdwoos
     ```
 
-5. Now you can verify the correct creation of the service account keys.
+1. Now you can verify the correct creation of the service account keys.
 
     ```baash
     SERVICE_ACCOUNT_BUCKET=service_account_bucket_name
