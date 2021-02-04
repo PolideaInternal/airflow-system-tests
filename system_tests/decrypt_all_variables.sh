@@ -22,9 +22,6 @@ KEYRING=${KEYRING:-airflow}
 KEY=${KEY:-airflow_crypto_key}
 
 function _decrypt_variables () {
-  echo
-  echo "Decrypting variables"
-  echo
   printenv | cut -d "=" -f 1 | grep -e "ENCRYPTED$" | while read -r key; do
       val=${!key}
       decrypted_key=${key%_ENCRYPTED}
@@ -36,6 +33,10 @@ function _decrypt_variables () {
       echo "export ${decrypted_key}=${decrypted_val}"
   done
 }
+
+echo
+echo "Decrypting variables"
+echo
 
 . "${MY_DIR}/set_variables.sh" >/dev/null
 
