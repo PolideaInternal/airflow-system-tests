@@ -39,7 +39,9 @@ steps:
           mkdir -p system_tests/airflow/files/airflow-breeze-config/keys
           mv init.sh system_tests/airflow/files/airflow-breeze-config
           mv set_variables.sh system_tests/airflow/files/airflow-breeze-config
-          mv decrypt_all_variables.sh system_tests/airflow/files/airflow-breeze-config
+          mv decrypt_all_variables.sh system_tests/airflow/files/airflow-breeze-config'
+
+          sed -i "s/YOUR_PROJECT_ID/$PROJECT_ID/g" system_tests/airflow/files/airflow-breeze-config/set_variables.sh
 
           chmod +x system_tests/airflow/files/airflow-breeze-config/decrypt_all_variables.sh
           bash system_tests/airflow/files/airflow-breeze-config/decrypt_all_variables.sh
