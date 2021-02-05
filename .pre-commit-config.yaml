@@ -18,7 +18,7 @@
 ---
 default_stages: [commit, push]
 default_language_version:
-  python: python3.7
+  python: python3.8
 minimum_pre_commit_version: "1.20.0"
 repos:
   - repo: https://github.com/Lucas-C/pre-commit-hooks
