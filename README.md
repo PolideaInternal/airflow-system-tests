@@ -35,12 +35,12 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
 
 ## Setting up environment
 
-  #### 1. Preparing Google Cloud Project
+  ### 1. Preparing Google Cloud Project
 
   Instruction how create Google Cloud Project for system tests is available in `airflow-providers-google-setup` folder.
   See instructions: [airflow-providers-google-setup/README.md](airflow-providers-google-setup/README.md)
 
-  #### 2. Modify files
+  ### 2. Modify files
 
   Modify following files:
    - `system_tests/cloudbuild.yaml` - so `_SERVICE_ACCOUNTS_GCS_BUCKET` will point to bucket with service accounts.
@@ -49,7 +49,7 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
       It is created in the previous step (output of `terraform apply` command prints bucket name `cloud_build_logs_bucket_name`).
    - `scripts/list_of_tests.sh` - comment / uncomment out tests which are / are not intended to run.
 
-  #### 3. Build docker image to run Breeze
+  ### 3. Build docker image to run Breeze
 
   In `airflow_system_tests_env_image` folder is located `Dockerfile` which describes environment to run Breeze
   (see [Breeze prerequisites](https://github.com/apache/airflow/blob/master/BREEZE.rst#prerequisites)).
@@ -65,7 +65,7 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
 
 ## Running tests
 
-  #### Run multiple system tests whitelisted in `scripts/list_of_tests.sh`:
+  ### Run multiple system tests whitelisted in `scripts/list_of_tests.sh`
 
   They will be executed by default on `apache/airflow` repository on `master` branch
 
@@ -80,7 +80,7 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
   gcloud builds list --filter "tags='trigger-fdb3a03b-1f99-45fa-8dcb-5cf4d6ca3828'" --format="table[box,margin=3,title='system tests'](id,status,tags,logUrl)"
   ```
 
-  #### Run single system test
+  ### Run single system test
 
   It will be executed by default on `apache/airflow` repository on `master` branch.
 
@@ -88,7 +88,7 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
   bash scripts/run_single_system_test.sh tests/providers/google/cloud/operators/test_speech_to_text_system.py
   ```
 
-  #### Run any command in Breeze environment
+  ### Run any command in Breeze environment
 
   Example of the command to run Google Memorystore system tests on the Airflow fork and non-default branch.
 
