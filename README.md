@@ -35,75 +35,75 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
 
 ## Setting up environment
 
-#### 1. Preparing Google Cloud Project
+  #### 1. Preparing Google Cloud Project
 
-    Instruction how create Google Cloud Project for system tests is available in `airflow-providers-google-setup` folder.
-    See instructions: [airflow-providers-google-setup/README.md](airflow-providers-google-setup/README.md)
+  Instruction how create Google Cloud Project for system tests is available in `airflow-providers-google-setup` folder.
+  See instructions: [airflow-providers-google-setup/README.md](airflow-providers-google-setup/README.md)
 
-#### 2. Modify files
+  #### 2. Modify files
 
-    Modify following files:
-     - `system_tests/cloudbuild.yaml` - so `_SERVICE_ACCOUNTS_GCS_BUCKET` will point to bucket with service accounts.
-        It is created in the previous step (output of `terraform apply` command prints bucket name `service_account_bucket_name`).
-     - `system_tests/cloudbuild.yaml` - so `LOGS_GCS_BUCKET` will point to bucket where Cloud Build logs will be uploaded.
-        It is created in the previous step (output of `terraform apply` command prints bucket name `cloud_build_logs_bucket_name`).
-     - `scripts/list_of_tests.sh` - comment / uncomment out tests which are / are not intended to run.
+  Modify following files:
+   - `system_tests/cloudbuild.yaml` - so `_SERVICE_ACCOUNTS_GCS_BUCKET` will point to bucket with service accounts.
+      It is created in the previous step (output of `terraform apply` command prints bucket name `service_account_bucket_name`).
+   - `system_tests/cloudbuild.yaml` - so `LOGS_GCS_BUCKET` will point to bucket where Cloud Build logs will be uploaded.
+      It is created in the previous step (output of `terraform apply` command prints bucket name `cloud_build_logs_bucket_name`).
+   - `scripts/list_of_tests.sh` - comment / uncomment out tests which are / are not intended to run.
 
-#### 3. Build docker image to run Breeze
+  #### 3. Build docker image to run Breeze
 
-    In `airflow_system_tests_env_image` folder is located `Dockerfile` which describes environment to run Breeze
-    (see [Breeze prerequisites](https://github.com/apache/airflow/blob/master/BREEZE.rst#prerequisites)).
+  In `airflow_system_tests_env_image` folder is located `Dockerfile` which describes environment to run Breeze
+  (see [Breeze prerequisites](https://github.com/apache/airflow/blob/master/BREEZE.rst#prerequisites)).
 
-    To build image and push it to GCR:
+  To build image and push it to GCR:
 
-    ```shell
-    cd airflow_system_tests_env_image
-    gcloud builds submit .
-    ```
+  ```shell
+  cd airflow_system_tests_env_image
+  gcloud builds submit .
+  ```
 
-    Docker image will be available at `gcr.io/$PROJECT_ID/airflow-system-tests-env:latest`.
+  Docker image will be available at `gcr.io/$PROJECT_ID/airflow-system-tests-env:latest`.
 
 ## Running tests
 
-#### Run multiple system tests whitelisted in `scripts/list_of_tests.sh`:
+  #### Run multiple system tests whitelisted in `scripts/list_of_tests.sh`:
 
-They will be executed by default on `apache/airflow` repository on `master` branch
+  They will be executed by default on `apache/airflow` repository on `master` branch
 
-```shell
-gcloud builds submit --config=cloudbuild_system_tests.yaml
-```
+  ```shell
+  gcloud builds submit --config=cloudbuild_system_tests.yaml
+  ```
 
-Command to list all triggered builds will be in the last line of the log, e.g.:
-```shell
-List runs with command:
+  Command to list all triggered builds will be in the last line of the log, e.g.:
+  ```shell
+  List runs with command:
 
-gcloud builds list --filter "tags='trigger-fdb3a03b-1f99-45fa-8dcb-5cf4d6ca3828'" --format="table[box,margin=3,title='system tests'](id,status,tags,logUrl)"
-```
+  gcloud builds list --filter "tags='trigger-fdb3a03b-1f99-45fa-8dcb-5cf4d6ca3828'" --format="table[box,margin=3,title='system tests'](id,status,tags,logUrl)"
+  ```
 
-#### Run single system test
+  #### Run single system test
 
-It will be executed by default on `apache/airflow` repository on `master` branch.
+  It will be executed by default on `apache/airflow` repository on `master` branch.
 
-```shell
-bash scripts/run_single_system_test.sh tests/providers/google/cloud/operators/test_speech_to_text_system.py
-```
+  ```shell
+  bash scripts/run_single_system_test.sh tests/providers/google/cloud/operators/test_speech_to_text_system.py
+  ```
 
-#### Run any command in Breeze environment
+  #### Run any command in Breeze environment
 
-Example of the command to run Google Memorystore system tests on the Airflow fork and non-default branch.
+  Example of the command to run Google Memorystore system tests on the Airflow fork and non-default branch.
 
-```shell
-CMD="./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_cloud_memorystore_system.py -- -s --system=google"
-AIRFLOW_REPO="https://github.com/PolideaInternal/airflow"
-BRANCH="fix-to-issue-8286-cloud-memorystore-memcached-operators"
+  ```shell
+  CMD="./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_cloud_memorystore_system.py -- -s --system=google"
+  AIRFLOW_REPO="https://github.com/PolideaInternal/airflow"
+  BRANCH="fix-to-issue-8286-cloud-memorystore-memcached-operators"
 
-cd system_tests
-gcloud builds submit \
-    --timeout=3600 \
-    --substitutions _CMD="${CMD}",_AIRFLOW_REPO="${AIRFLOW_REPO}",_BRANCH="${BRANCH}"
-```
+  cd system_tests
+  gcloud builds submit \
+      --timeout=3600 \
+      --substitutions _CMD="${CMD}",_AIRFLOW_REPO="${AIRFLOW_REPO}",_BRANCH="${BRANCH}"
+  ```
 
-Setting `--timeout` for system tests is recommended.
+  Setting `--timeout` for system tests is recommended.
 
 ## Google Cloud Build configuration to run Breeze
 
